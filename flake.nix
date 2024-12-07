@@ -21,7 +21,7 @@
         with pkgs; {
           devShells = {
             default = mkShell {
-              packages = [ j ];
+              packages = [ j nix-output-monitor ];
             };
           };
 

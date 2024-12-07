@@ -13,17 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "9.5.1";
+  version = "J9.6-beta25";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "${version}";
-    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
+    rev = "16d3b3caee5440d29402f4e801cac83575a7ff6d";
+    hash = "sha256-deMKkUH9M/DGPx+0KUao8++HILsw3QuHt8eV70aB/8M=";
   };
 
-  nativeBuildInputs = [ which makeWrapper ];
-  buildInputs = [ gmp pcre2 libxml2 libz sqlite ];
+  nativeBuildInputs = [  makeWrapper ];
+  buildInputs = [ gmp pcre2 libxml2 libz sqlite which ];
 
   patches = [
     ./fix-install-path.patch
