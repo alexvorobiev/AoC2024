@@ -1,2 +1,3 @@
 data=: 'b' freads 'test.txt'
-(I. data = a:) {. data
+
+'rules updates'=:data (({.~ -&1); (<@(}.~ +&1))) I. data = a:
