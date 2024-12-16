@@ -1,0 +1,126 @@
+#+TITLE: J Sandbox
+#+STARTUP: inlineimages
+#+options: toc:2
+#+last_modified: 2024-12-15 21:10:18 alex
+
+* Table of contents                                                     :TOC:
+- [[#heads-and-tails][Heads and tails]]
+- [[#indices][Indices]]
+- [[#sets][Sets]]
+  - [[#difference][Difference]]
+  - [[#element][Element]]
+- [[#sort][Sort]]
+- [[#gerund][Gerund]]
+- [[#org-configuration][org-configuration]]
+
+* Heads and tails
+#+begin_src j
+  ({. ; }. ; }: ;{:) i.4
+#+end_src
+#+RESULTS:
+: ┌─┬─────┬─────┬─┐
+: │0│1 2 3│0 1 2│3│
+: └─┴─────┴─────┴─┘
+#+begin_src j
+    2 ({. ; }.) i.4
+#+end_src
+
+#+RESULTS:
+: ┌───┬───┐
+: │0 1│2 3│
+: └───┴───┘
+
+* Indices
+#+begin_src j
+   1 0 1 0 0 0 # 3 1 4 1 5 9
+#+end_src
+
+#+RESULTS:
+: 3 4
+
+Finds the first occurrence of =y= in =x=
+https://code.jsoftware.com/wiki/Vocabulary/idot#dyadic
+#+begin_src j
+   3 1 4 1 5 9 i. 5
+#+end_src
+
+#+RESULTS:
+: 4
+
+Several elements to search
+#+begin_src j
+   3 1 4 1 5 9 i. i.5
+#+end_src
+
+#+RESULTS:
+: 6 1 6 0 2
+
+=#x= if not found
+#+begin_src j
+   10 i. 5
+#+end_src
+
+#+RESULTS:
+: 1
+
+Indices of all 1s in a Boolean list
+https://code.jsoftware.com/wiki/Vocabulary/icapdot
+#+begin_src j
+   I. 3 2 4 5 > 4 1 9 3
+#+end_src
+
+#+RESULTS:
+: 1 3
+
+Index of the interval of a sorted list =x= in which =y= lies
+#+begin_src j
+  (i.10) I. 2.5 7.3 5
+#+end_src
+
+#+RESULTS:
+: 3 8 5
+
+* Sets
+** Difference
+#+begin_src j
+   1 2 3 4 5 4 3 -. 2 4
+#+end_src
+
+#+RESULTS:
+: 1 3 5 3
+** Element
+#+begin_src j
+  (2 e. i.5) ; 10 e. i.5
+#+end_src
+
+#+RESULTS:
+: ┌─┬─┐
+: │1│0│
+: └─┴─┘
+
+* Sort
+#+begin_src j
+  1 3 6 i.7
+#+end_src
+
+#+RESULTS:
+: 3
+
+* Gerund
+https://code.jsoftware.com/wiki/Help/Learning/Ch_14:_Gerunds
+#+begin_src j
+  +/`#`{:`:0 i.5
+#+end_src
+
+#+RESULTS:
+: 10 5 4
+
+* org-configuration
+#+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
+#+OPTIONS: ^:nil
+#+property: header-args:emacs-lisp :results silent
+#+property: header-args:j :session *J* results verbatim
+# Local Variables:
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
+# time-stamp-active: t
+# End:
