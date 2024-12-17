@@ -1,0 +1,189 @@
+#+TITLE: Advent of Code 2024 Day 5
+#+STARTUP: inlineimages
+#+options: toc:2
+#+last_modified: 2024-12-16 22:30:37 alex
+
+* Table of contents                                                     :TOC:
+- [[#1][1]]
+  - [[#data][Data]]
+  - [[#find-rules][Find rules]]
+  - [[#check-rules][Check rules]]
+  - [[#sublists][Sublists]]
+  - [[#check-update][Check update]]
+- [[#2][2]]
+- [[#org-configuration][org-configuration]]
+
+* 1
+** Data
+#+begin_src j :results silent
+  data=: 'b' freads 'test.txt'
+
+  'rules updates'=:data (({.~ -&1); (<@(}.~ +&1))) I. data = a:
+
+  NB. evaluate each comma-separated literal value
+  updates =: ". each updates
+  NB. replace | with commas, then evaluate
+  rules   =: |:"."1 ',' 2}"1 >rules
+#+end_src
+
+#+begin_src j
+  updates
+#+end_src
+
+#+RESULTS:
+: ┌──────────────┬──────────────┬────────┬──────────────┬────────┬──────────────┐
+: │75 47 61 53 29│97 61 53 29 13│75 29 13│75 97 47 61 53│61 13 29│97 13 75 29 47│
+: └──────────────┴──────────────┴────────┴──────────────┴────────┴──────────────┘
+#+begin_src j
+  rules
+#+end_src
+
+#+RESULTS:
+: 47 97 97 97 75 61 75 29 97 53 61 97 61 47 75 97 47 75 47 75
+: 53 13 61 47 29 13 53 13 29 29 53 53 29 13 47 75 61 61 29 13
+** Find rules
+#+begin_src j :results silent
+  getRules =: 3 : 0
+    (y = {.rules) # {:rules
+  )
+#+end_src
+
+#+begin_src j
+  getRules 75
+#+end_src
+
+#+RESULTS:
+: 29 53 47 61 13
+** Check rules
+First update
+#+begin_src j
+  ]u =: >{.updates
+#+end_src
+
+#+RESULTS:
+: 75 47 61 53 29
+#+begin_src j
+  ]r =: getRules {.u
+#+end_src
+
+#+RESULTS:
+: 29 53 47 61 13
+#+begin_src j
+  0 = # (}.u) -. r
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j :results silent
+  checkRules =: 4 : 0
+    0 = # y -. getRules x
+  )
+#+end_src
+
+#+begin_src j
+  75 checkRules 47 61 53 29
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j
+  75 checkRules 47 61 53 97
+#+end_src
+
+#+RESULTS:
+: 0
+#+begin_src j
+  u =: >{.updates
+  ({.u) checkRules }.u
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j
+  ({. checkRules }.) u
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j
+]u2 =: >1{updates
+#+end_src
+
+#+RESULTS:
+: 97 61 53 29 13
+#+begin_src j
+   ({. checkRules }.) u2
+#+end_src
+
+#+RESULTS:
+: 1
+
+** Sublists
+#+begin_src j
+  }.(<@|.)\|.u
+#+end_src
+
+#+RESULTS:
+: ┌─────┬────────┬───────────┬──────────────┐
+: │53 29│61 53 29│47 61 53 29│75 47 61 53 29│
+: └─────┴────────┴───────────┴──────────────┘
+#+begin_src j
+  >({. checkRules }.) each }.(<@|.)\|.u
+#+end_src
+
+#+RESULTS:
+: 1 1 1 1
+#+begin_src j
+  }.(<@|.)\|.u2
+#+end_src
+
+#+RESULTS:
+: ┌─────┬────────┬───────────┬──────────────┐
+: │29 13│53 29 13│61 53 29 13│97 61 53 29 13│
+: └─────┴────────┴───────────┴──────────────┘
+#+begin_src j
+  >({. checkRules }.) each }.(<@|.)\|.u2
+#+end_src
+
+#+RESULTS:
+: 1 0 1 1
+#+begin_src j
+  getRules 53
+#+end_src
+
+#+RESULTS:
+: 29
+
+** Check update
+#+begin_src j :results silent
+  checkUpdate =: 3 : 0
+    */ >({. checkRules }.) each }.(<@|.)\|.y
+  )
+#+end_src
+
+#+begin_src j
+  checkUpdate u
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j
+  checkUpdate each updates
+#+end_src
+
+#+RESULTS:
+: ┌─┬─┬─┬─┬─┬─┐
+: │1│0│1│0│0│0│
+: └─┴─┴─┴─┴─┴─┘
+
+* 2
+
+* org-configuration
+#+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
+#+OPTIONS: ^:nil
+#+property: header-args:emacs-lisp :results silent
+#+property: header-args:j :session *J* :results verbatim
+# Local Variables:
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
+# time-stamp-active: t
+# End:
