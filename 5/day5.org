@@ -1,7 +1,7 @@
 #+TITLE: Advent of Code 2024 Day 5
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-16 22:30:37 alex
+#+last_modified: 2024-12-17 22:36:30 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -10,15 +10,17 @@
   - [[#check-rules][Check rules]]
   - [[#sublists][Sublists]]
   - [[#check-update][Check update]]
+  - [[#correct-updates][Correct updates]]
 - [[#2][2]]
+  - [[#bad-updates][Bad updates]]
 - [[#org-configuration][org-configuration]]
 
 * 1
 ** Data
-#+begin_src j :results silent
+#+begin_src j :results silent :tangle yes
   data=: 'b' freads 'test.txt'
 
-  'rules updates'=:data (({.~ -&1); (<@(}.~ +&1))) I. data = a:
+  'rules updates'=:data (({.~); (<@(}.~ +&1)))  data i. a:
 
   NB. evaluate each comma-separated literal value
   updates =: ". each updates
@@ -42,7 +44,7 @@
 : 47 97 97 97 75 61 75 29 97 53 61 97 61 47 75 97 47 75 47 75
 : 53 13 61 47 29 13 53 13 29 29 53 53 29 13 47 75 61 61 29 13
 ** Find rules
-#+begin_src j :results silent
+#+begin_src j :results silent :tangle yes
   getRules =: 3 : 0
     (y = {.rules) # {:rules
   )
@@ -62,6 +64,7 @@ First update
 
 #+RESULTS:
 : 75 47 61 53 29
+
 #+begin_src j
   ]r =: getRules {.u
 #+end_src
@@ -74,7 +77,8 @@ First update
 
 #+RESULTS:
 : 1
-#+begin_src j :results silent
+
+#+begin_src j :results silent :tangle yes
   checkRules =: 4 : 0
     0 = # y -. getRules x
   )
@@ -93,7 +97,6 @@ First update
 #+RESULTS:
 : 0
 #+begin_src j
-  u =: >{.updates
   ({.u) checkRules }.u
 #+end_src
 
@@ -105,12 +108,7 @@ First update
 
 #+RESULTS:
 : 1
-#+begin_src j
-]u2 =: >1{updates
-#+end_src
 
-#+RESULTS:
-: 97 61 53 29 13
 #+begin_src j
    ({. checkRules }.) u2
 #+end_src
@@ -146,16 +144,16 @@ First update
 #+end_src
 
 #+RESULTS:
-: 1 0 1 1
+: 1 1 1 1
 #+begin_src j
   getRules 53
 #+end_src
 
 #+RESULTS:
-: 29
+: 29 13
 
 ** Check update
-#+begin_src j :results silent
+#+begin_src j :results silent :tangle yes
   checkUpdate =: 3 : 0
     */ >({. checkRules }.) each }.(<@|.)\|.y
   )
@@ -168,15 +166,52 @@ First update
 #+RESULTS:
 : 1
 #+begin_src j
-  checkUpdate each updates
+  >checkUpdate each updates
 #+end_src
 
 #+RESULTS:
-: ┌─┬─┬─┬─┬─┬─┐
-: │1│0│1│0│0│0│
-: └─┴─┴─┴─┴─┴─┘
+: 1 1 1 0 0 0
 
+** Correct updates
+#+begin_src j
+  (>checkUpdate each updates) # updates
+#+end_src
+
+#+RESULTS:
+: ┌──────────────┬──────────────┬────────┐
+: │75 47 61 53 29│97 61 53 29 13│75 29 13│
+: └──────────────┴──────────────┴────────┘
+Middle number
+#+begin_src j
+  ]u
+  ](-:(#u)-1) { u
+#+end_src
+
+#+RESULTS:
+: 75 47 61 53 29
+:
+: 61
+
+Add middle numbers
+#+begin_src j :tangle yes
+     +/> {{ (-:(#y)-1) { y }} each (>checkUpdate each updates) # updates
+#+end_src
+
+#+RESULTS:
+: 143
+#+begin_src emacs-lisp
+  (org-babel-tangle)
+#+end_src
 * 2
+** Bad updates
+#+begin_src j
+  (-.>checkUpdate each updates) # updates
+#+end_src
+
+#+RESULTS:
+: ┌──────────────┬────────┬──────────────┐
+: │75 97 47 61 53│61 13 29│97 13 75 29 47│
+: └──────────────┴────────┴──────────────┘
 
 * org-configuration
 #+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
