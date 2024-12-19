@@ -1,7 +1,7 @@
 #+TITLE: J Sandbox
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-15 21:10:18 alex
+#+last_modified: 2024-12-18 20:39:53 alex
 
 * Table of contents                                                     :TOC:
 - [[#heads-and-tails][Heads and tails]]
@@ -10,6 +10,7 @@
   - [[#difference][Difference]]
   - [[#element][Element]]
 - [[#sort][Sort]]
+- [[#rotate][Rotate]]
 - [[#gerund][Gerund]]
 - [[#org-configuration][org-configuration]]
 
@@ -22,13 +23,21 @@
 : │0│1 2 3│0 1 2│3│
 : └─┴─────┴─────┴─┘
 #+begin_src j
-    2 ({. ; }.) i.4
+  2 ({. ; }.) i.4
 #+end_src
 
 #+RESULTS:
 : ┌───┬───┐
 : │0 1│2 3│
 : └───┴───┘
+#+begin_src j
+  6 ({. ; }.) i.4
+#+end_src
+
+#+RESULTS:
+: ┌───────────┬┐
+: │0 1 2 3 0 0││
+: └───────────┴┘
 
 * Indices
 #+begin_src j
@@ -105,6 +114,36 @@ Index of the interval of a sorted list =x= in which =y= lies
 
 #+RESULTS:
 : 3
+
+* Rotate
+#+begin_src j
+  _2 |.     1, 5 $ 0
+#+end_src
+
+#+RESULTS:
+: 0 0 1 0 0 0
+
+Identity matrix
+(https://code.jsoftware.com/wiki/Essays/Identity_Matrix#Rotate)
+#+begin_src j
+  (-@i. |."0 1 {.&1) 5
+#+end_src
+
+#+RESULTS:
+: 1 0 0 0 0
+: 0 1 0 0 0
+: 0 0 1 0 0
+: 0 0 0 1 0
+: 0 0 0 0 1
+
+#+begin_src j
+  (-i.6) |."0"1 1, 5 $ 0
+#+end_src
+
+#+RESULTS:
+: |length error, executing dyad |."0
+: |shapes 6 and 5 do not conform
+: |   (-i.6)    |."0"1 1,5$0
 
 * Gerund
 https://code.jsoftware.com/wiki/Help/Learning/Ch_14:_Gerunds

@@ -1,7 +1,7 @@
 #+TITLE: Advent of Code 2024 Day 5
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-17 22:36:30 alex
+#+last_modified: 2024-12-18 22:59:36 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -200,17 +200,106 @@ Add middle numbers
 #+RESULTS:
 : 143
 #+begin_src emacs-lisp
-  (org-babel-tangle)
+  (org-babel-tangle nil "day5_1.ijs")
 #+end_src
 * 2
 ** Bad updates
 #+begin_src j
-  (-.>checkUpdate each updates) # updates
+  ]bu =: (-.>checkUpdate each updates) # updates
 #+end_src
 
 #+RESULTS:
 : ┌──────────────┬────────┬──────────────┐
 : │75 97 47 61 53│61 13 29│97 13 75 29 47│
+: └──────────────┴────────┴──────────────┘
+Take one element of an update and subtract rules for it from the set of the rest of the elements in the update. The result is the elements which are not in the rules.
+#+begin_src j
+  ]u =. >{.bu
+  ]getRules {.u
+  ]}.u
+  {{ (}.y) -. getRules {.y }} u
+#+end_src
+
+#+RESULTS:
+: 75 97 47 61 53
+:
+: 29 53 47 61 13
+:
+: 97 47 61 53
+:
+: 97
+
+Repeat for all elements in the update
+#+begin_src j :results silent
+  id =: -@i. |."0 1 {.&1
+#+end_src
+
+#+begin_src j
+  id #u
+#+end_src
+#+RESULTS:
+: 1 0 0 0 0
+: 0 1 0 0 0
+: 0 0 1 0 0
+: 0 0 0 1 0
+: 0 0 0 0 1
+
+#+begin_src j
+  (id #u) {{ ((-.x) # y) }}"1 u
+#+end_src
+
+#+RESULTS:
+: 97 47 61 53
+: 75 47 61 53
+: 75 97 61 53
+: 75 97 47 53
+: 75 97 47 61
+#+begin_src j
+  ({.(id #u)) {{ getRules {. x # y }}"1 u
+#+end_src
+
+#+RESULTS:
+: 29 53 47 61 13
+For each element of =u=,  how many restrictions w.r.t. other elements in =u=
+#+begin_src j
+  ]m =: (id #u) {{ ((-.x) # y) -. getRules {. x # y }}"1 u
+#+end_src
+
+#+RESULTS:
+: 97  0  0  0
+:  0  0  0  0
+: 75 97  0  0
+: 75 97 47  0
+: 75 97 47 61
+
+Sort by the number of restrictions -- that's the correct order for =u=
+#+begin_src j
+  {{ +/ y ~: 0 }}"1 m
+#+end_src
+
+#+RESULTS:
+: 1 0 2 3 4
+#+begin_src j
+  ({{ +/ y ~: 0 }}"1 m) { u
+#+end_src
+
+#+RESULTS:
+: 97 75 47 61 53
+
+#+begin_src j :results silent :tangle yes
+  orderUpdate =: 3 : 0
+      m =. (id #y) {{ ((-.x) # y) -. getRules {. x # y }}"1 y
+      ({{ +/ y ~: 0 }}"1 m) { y
+  )
+#+end_src
+
+#+begin_src j
+  orderUpdate each bu
+#+end_src
+
+#+RESULTS:
+: ┌──────────────┬────────┬──────────────┐
+: │97 75 47 61 53│61 29 13│97 47 13 29 75│
 : └──────────────┴────────┴──────────────┘
 
 * org-configuration
