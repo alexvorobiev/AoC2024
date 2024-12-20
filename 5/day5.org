@@ -1,7 +1,7 @@
 #+TITLE: Advent of Code 2024 Day 5
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-18 23:27:43 alex
+#+last_modified: 2024-12-19 11:48:26 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -204,7 +204,7 @@ Add middle numbers
 #+end_src
 * 2
 ** Bad updates
-#+begin_src j
+#+begin_src j :tangle yes
   ]bu =: (-.>checkUpdate each updates) # updates
 #+end_src
 
@@ -228,7 +228,7 @@ Take one element of an update and subtract rules for it from the set of the rest
 : 13 75 29 47
 
 Repeat for all elements in the update
-#+begin_src j :results silent
+#+begin_src j :results silent :tangle yes
   id =: -@i. |."0 1 {.&1
 #+end_src
 
@@ -313,7 +313,7 @@ Add middle numbers
 #+RESULTS:
 : 123
 #+begin_src emacs-lisp
-  (org-babel-tangle nil "day5_2.ijs")
+  (org-babel-tangle) ;nil "day5_2.ijs")
 #+end_src
 * org-configuration
 #+STARTUP: align fold nodlcheck hidestars oddeven lognotestate

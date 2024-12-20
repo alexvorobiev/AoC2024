@@ -1,0 +1,71 @@
+#+TITLE: Advent of Code 2024 Day 6
+#+STARTUP: inlineimages
+#+options: toc:2
+#+property: header-args:j :session *J* :results verbatim
+#+last_modified: 2024-12-19 23:45:13 alex
+
+* Table of contents                                                     :TOC:
+- [[#1][1]]
+  - [[#data][Data]]
+  - [[#rotate-matrix][Rotate matrix]]
+  - [[#zero-matrix][Zero matrix]]
+- [[#org-configuration][org-configuration]]
+
+* 1
+** Data
+#+begin_src j :tangle yes :results silent
+  f =: 'input.txt'
+#+end_src
+#+begin_src j :results silent
+  f =: 'test.txt'
+#+end_src
+#+begin_src j :tangle yes :results silent
+  d =: >'b' freads f
+#+end_src
+** Rotate matrix
+#+begin_src j :tangle yes :results silent
+  rotR =: |."1 @: |:
+  rotL =: rotR^:3
+#+end_src
+
+#+begin_src j
+  m =: 3 3 $ i.9
+  ]rotR m
+  m = rotL @ rotR [ m
+#+end_src
+
+#+RESULTS:
+: 6 3 0
+: 7 4 1
+: 8 5 2
+:
+: 1 1 1
+: 1 1 1
+: 1 1 1
+** Zero matrix
+#+begin_src j :tangle yes
+  ] z =: ((#d), #d) $ 0
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+#+end_example
+
+* org-configuration
+#+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
+#+OPTIONS: ^:nil
+#+property: header-args:emacs-lisp :results silent
+# Local Variables:
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
+# time-stamp-active: t
+# End:
