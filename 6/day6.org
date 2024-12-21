@@ -2,13 +2,16 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2024-12-19 23:45:13 alex
+#+last_modified: 2024-12-20 20:18:47 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
   - [[#data][Data]]
   - [[#rotate-matrix][Rotate matrix]]
   - [[#zero-matrix][Zero matrix]]
+  - [[#locate-][Locate ^]]
+  - [[#travel-step][Travel step]]
+  - [[#djfskj][djfskj]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -60,6 +63,38 @@
 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0
 #+end_example
+** Locate ^
+#+begin_src j
+  ]v =: |: I. '^' = d
+  ]r =: {.I. 0 < v
+  ]c =: {.r { {.v
+#+end_src
+
+#+RESULTS:
+: 0 0 0 0 0 0 4 0 0 0
+:
+: 6
+:
+: 4
+
+** Travel step
+Always travel to the right, so start with rotating the input to the right
+#+begin_src j
+  m =: rotR d
+  ] p0 =: c, 9-r
+   (9 - r) {c {m
+#+end_src
+
+#+RESULTS:
+: 4 3
+:
+: ^
+
+Search for the first '#' to the right in the same row
+#+begin_src j
+p0
+#+end_src
+** djfskj
 
 * org-configuration
 #+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
