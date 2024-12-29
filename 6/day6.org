@@ -2,7 +2,7 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2024-12-20 20:18:47 alex
+#+last_modified: 2024-12-25 23:06:03 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -65,9 +65,9 @@
 #+end_example
 ** Locate ^
 #+begin_src j
-  ]v =: |: I. '^' = d
+  ]v =: {.|: I. '^' = d
   ]r =: {.I. 0 < v
-  ]c =: {.r { {.v
+  ]c =: r { v
 #+end_src
 
 #+RESULTS:
@@ -82,7 +82,7 @@ Always travel to the right, so start with rotating the input to the right
 #+begin_src j
   m =: rotR d
   ] p0 =: c, 9-r
-   (9 - r) {c {m
+  (9 - r) {c {m
 #+end_src
 
 #+RESULTS:
@@ -92,7 +92,45 @@ Always travel to the right, so start with rotating the input to the right
 
 Search for the first '#' to the right in the same row
 #+begin_src j
-p0
+  ] t=: (9-r)}. c{m
+  ] pound =: t i.'#'
+#+end_src
+
+#+RESULTS:
+: ^.....#
+:
+: 6
+
+#+begin_src j
+  (< c ; ((9 - r) + i.pound)) {m
+#+end_src
+
+#+RESULTS:
+: ^.....
+
+Mark the intermediate locations with 'X's
+#+begin_src j
+  'X' (< c ; ((9 - r) + i.pound)) } m
+#+end_src
+
+#+RESULTS:
+#+begin_example
+.#........
+...#......
+......#...
+..........
+...XXXXXX#
+..........
+#.........
+.....#....
+..#.......
+........#.
+#+end_example
+
+#+begin_src j :tangle yes :results silent
+  step =: {{
+
+  }}
 #+end_src
 ** djfskj
 
