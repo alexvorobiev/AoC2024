@@ -2,7 +2,7 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2024-12-25 23:06:03 alex
+#+last_modified: 2024-12-30 23:37:45 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -128,9 +128,61 @@ Mark the intermediate locations with 'X's
 #+end_example
 
 #+begin_src j :tangle yes :results silent
-  step =: {{
+  M =: rotR d
+  v0 =: {.|: I. '^' = M
+  r0 =: {.I. 0 < v0
+  c0 =: r0 { v0
+#+end_src
 
-  }}
+Step to the right
+#+begin_src j :tangle yes :results silent
+  step =: 3 : 0
+    'r c M' =. y
+    pound =. (c}. r{M) i.'#'
+    (((#M) - c) - pound); r; rotL ('X' (< r ; (c + i.pound)) } M)
+  )
+#+end_src
+
+#+begin_src j
+  step r0; c0; M
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─┬─┬──────────┐
+│1│4│....#.....│
+│ │ │....X....#│
+│ │ │....X.....│
+│ │ │..#.X.....│
+│ │ │....X..#..│
+│ │ │....X.....│
+│ │ │.#..X.....│
+│ │ │........#.│
+│ │ │#.........│
+│ │ │......#...│
+└─┴─┴──────────┘
+#+end_example
+
+#+begin_src j
+  step^:2 r0; c0; M
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─┬─┬──────────┐
+│1│1│.#........│
+│ │ │.X.....#..│
+│ │ │.X..#.....│
+│ │ │.X.......#│
+│ │ │.X........│
+│ │ │#XXXXXX...│
+│ │ │..........│
+│ │ │...#......│
+│ │ │......#...│
+│ │ │........#.│
+└─┴─┴──────────┘
+#+end_example
+
 #+end_src
 ** djfskj
 

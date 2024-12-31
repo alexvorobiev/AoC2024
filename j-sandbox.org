@@ -1,7 +1,7 @@
 #+TITLE: J Sandbox
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-26 22:30:32 alex
+#+last_modified: 2024-12-30 23:44:41 alex
 
 * Table of contents                                                     :TOC:
 - [[#heads-and-tails][Heads and tails]]
@@ -25,13 +25,13 @@
 : │0│1 2 3│0 1 2│3│
 : └─┴─────┴─────┴─┘
 #+begin_src j
-  2 ({. ; }.) i.4
+  2 ({. ; }.) i.5
 #+end_src
 
 #+RESULTS:
-: ┌───┬───┐
-: │0 1│2 3│
-: └───┴───┘
+: ┌───┬─────┐
+: │0 1│2 3 4│
+: └───┴─────┘
 #+begin_src j
   6 ({. ; }.) i.4
 #+end_src
