@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "J9.6-beta25";
+  version = "J9.6-beta26";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "720e9045f76ef8d8b1c0cbd577c47747567c030f";
-    hash = "sha256-JQiQn1ukYC870H9hujra+wdW5G3qX6jNMy8nZV6Zxpg=";
+    rev = "22220d72a279e62a22d3fb096df875068885d7b7";
+    hash = "sha256-hIfhCsHo3nD+oABIe6Bo0Ud4HkyUodT2wdBAZpIZnSU=";
   };
 
   nativeBuildInputs = [  makeWrapper ];
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
     else "unsupported";
 
   env.NIX_LDFLAGS = "-lgmp";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=stringop-overflow"
+  ];
 
   buildPhase = ''
     runHook preBuild
