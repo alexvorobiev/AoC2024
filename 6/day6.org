@@ -2,16 +2,15 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2024-12-30 23:37:45 alex
+#+last_modified: 2025-01-02 00:04:31 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
   - [[#data][Data]]
   - [[#rotate-matrix][Rotate matrix]]
-  - [[#zero-matrix][Zero matrix]]
   - [[#locate-][Locate ^]]
   - [[#travel-step][Travel step]]
-  - [[#djfskj][djfskj]]
+  - [[#run][Run]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -45,24 +44,7 @@
 : 1 1 1
 : 1 1 1
 : 1 1 1
-** Zero matrix
-#+begin_src j :tangle yes
-  ] z =: ((#d), #d) $ 0
-#+end_src
 
-#+RESULTS:
-#+begin_example
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-#+end_example
 ** Locate ^
 #+begin_src j
   ]v =: {.|: I. '^' = d
@@ -164,27 +146,64 @@ Step to the right
 #+end_example
 
 #+begin_src j
-  step^:2 r0; c0; M
+  step^:(0 < 0{::[)^:_. r0; c0; M
 #+end_src
 
 #+RESULTS:
 #+begin_example
 ┌─┬─┬──────────┐
-│1│1│.#........│
-│ │ │.X.....#..│
-│ │ │.X..#.....│
-│ │ │.X.......#│
-│ │ │.X........│
-│ │ │#XXXXXX...│
-│ │ │..........│
-│ │ │...#......│
-│ │ │......#...│
-│ │ │........#.│
+│0│2│..X#......│
+│ │ │..XXXXXXX#│
+│ │ │.#XXXXXXX.│
+│ │ │.XXXXXXX#.│
+│ │ │.X.X.X.X..│
+│ │ │.X#XXXXX..│
+│ │ │.X...X.#..│
+│ │ │.X...X....│
+│ │ │#XXXXX....│
+│ │ │.....#....│
 └─┴─┴──────────┘
 #+end_example
 
+** Run
+#+begin_src j :tangle yes
+  +/+/'X' = 2{::step^:(0 < 0{::[)^:_. r0; c0; M
 #+end_src
-** djfskj
+
+#+RESULTS:
+: 41
+#+begin_src emacs-lisp
+  (org-babel-tangle)
+#+end_src
+
+Load with a display
+#+begin_src j
+  loadd 'day6.j'
+#+end_src
+
+#+RESULTS:
+#+begin_example
+f =: 'input.txt'
+
+   d =: >'b' freads f
+
+   rotR =: |."1 @: |:
+   rotL =: rotR^:3
+
+   M =: rotR d
+   v0 =: {.|: I. '^' = M
+   r0 =: {.I. 0 < v0
+   c0 =: r0 { v0
+
+   step =: 3 : 0
+  'r c M' =. y
+  pound =. (c}. r{M) i.'#'
+  (((#M) - c) - pound); r; rotL ('X' (< r ; (c + i.pound)) } M)
+)
+
+   +/+/'X' = 2{::step^:(0 < 0{::[)^:_. r0; c0; M
+5242
+#+end_example
 
 * org-configuration
 #+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
