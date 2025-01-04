@@ -2,7 +2,7 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2025-01-02 00:04:31 alex
+#+last_modified: 2025-01-03 21:47:19 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -11,6 +11,11 @@
   - [[#locate-][Locate ^]]
   - [[#travel-step][Travel step]]
   - [[#run][Run]]
+- [[#2][2]]
+  - [[#positions-of-all-dots][Positions of all dots]]
+  - [[#add--to-a-given-position][Add # to a given position]]
+  - [[#add-the--and-run-the-simulation-until-the-end][Add the # and run the simulation until the end]]
+  - [[#run-for-all-positions][Run for all positions]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -203,7 +208,130 @@ f =: 'input.txt'
 
    +/+/'X' = 2{::step^:(0 < 0{::[)^:_. r0; c0; M
 5242
+
+   ]p =: ('.'=M) #&, j./~ i.#M
+0 0j1 0j2 0j3 0j4 0j5 0j6 0j7 0j8 0j9 0j10 0j11 0j12 0j13 0j14 0j15 0j16 0j17 0j18 0j19 0j20 0j21 0j23 0j24 0j25 0j27 0j28 0j29 0j30 0j31 0j32 0j33 0j34 0j35 0j36 0j38 0j39 0j40 0j41 0j42 0j43 0j44 0j45 0j46 0j47 0j48 0j49 0j50 0j51 0j53 0j54 0j55 0j56 0j5...
+
+   stepX =: 3 : 0
+  'r c X0 X1 M' =. y
+  pound =. (c}. r{M) i.'#'
+  (((#M) - c) - pound); r; X1; (+/+/'X' = m); m=:rotL ('X' (< r ; (c + i.pound)) } M)
+)
+
+   sim =: 4 : 0
+  'r c X0 X1 M' =. x
+  NB. Modify the stopping condition to check X0=X1
+  NB. Return 1 if stopped because of a loop
+  0 < 0{:: stepX^:(((2{::[)< 3{::[) *. 0 < 0{::[)^:_. r0; c0; X0; X1; ('#' (< +. y)} M)
+)
 #+end_example
+
+* 2
+
+** Positions of all dots
+#+begin_src j
+  j./~ i.#M
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0 0j1 0j2 0j3 0j4 0j5 0j6 0j7 0j8 0j9
+1 1j1 1j2 1j3 1j4 1j5 1j6 1j7 1j8 1j9
+2 2j1 2j2 2j3 2j4 2j5 2j6 2j7 2j8 2j9
+3 3j1 3j2 3j3 3j4 3j5 3j6 3j7 3j8 3j9
+4 4j1 4j2 4j3 4j4 4j5 4j6 4j7 4j8 4j9
+5 5j1 5j2 5j3 5j4 5j5 5j6 5j7 5j8 5j9
+6 6j1 6j2 6j3 6j4 6j5 6j6 6j7 6j8 6j9
+7 7j1 7j2 7j3 7j4 7j5 7j6 7j7 7j8 7j9
+8 8j1 8j2 8j3 8j4 8j5 8j6 8j7 8j8 8j9
+9 9j1 9j2 9j3 9j4 9j5 9j6 9j7 9j8 9j9
+#+end_example
+
+#+begin_src j :tangle yes
+  ]p =: ('.'=M) #&, j./~ i.#M
+#+end_src
+
+#+RESULTS:
+: 0 0j2 0j3 0j4 0j5 0j6 0j7 0j8 0j9 1 1j1 1j2 1j4 1j5 1j6 1j7 1j8 1j9 2 2j1 2j2 2j3 2j4 2j5 2j7 2j8 2j9 3 3j1 3j2 3j3 3j4 3j5 3j6 3j7 3j8 3j9 4 4j1 4j2 4j4 4j5 4j6 4j7 4j8 5 5j1 5j2 5j3 5j4 5j5 5j6 5j7 5j8 5j9 6j1 6j2 6j3 6j4 6j5 6j6 6j7 6j8 6j9 7 7j1 7j2 7j...
+
+** Add # to a given position
+#+begin_src j
+  +. 4j3
+#+end_src
+
+#+RESULTS:
+: 4 3
+#+begin_src j
+  (< +. 4j3){M
+#+end_src
+
+#+RESULTS:
+: ^
+#+begin_src j
+  '#' (< +. 0j0)} M
+#+end_src
+
+#+RESULTS:
+#+begin_example
+##........
+...#......
+......#...
+..........
+...^.....#
+..........
+#.........
+.....#....
+..#.......
+........#.
+#+end_example
+
+** Add the # and run the simulation until the end
+Add two  more input/output - number of 'X's on previous and current steps to detect loops
+#+begin_src j :tangle yes :results no
+  stepX =: 3 : 0
+    'r c X0 X1 M' =. y
+    pound =. (c}. r{M) i.'#'
+    (((#M) - c) - pound); r; X1; (+/+/'X' = m); m=:rotL ('X' (< r ; (c + i.pound)) } M)
+  )
+#+end_src
+
+#+begin_src j :tangle yes :results silent
+  sim =: 4 : 0
+    'r c X0 X1 M' =. x
+    NB. Modify the stopping condition to check X0=X1
+    NB. Return 1 if stopped because of a loop
+    0 < 0{:: stepX^:(((2{::[)< 3{::[) *. 0 < 0{::[)^:_. r0; c0; X0; X1; ('#' (< +. y)} M)
+  )
+#+end_src
+
+#+begin_src j
+  (r0; c0; 0; 1; M) sim 0j0
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src j
+  (r0; c0; 0; 1; M) sim 3j3
+#+end_src
+
+#+RESULTS:
+: 1
+
+** Run for all positions
+#+begin_src j
+  ((r0; c0; 0; 1; M)&sim)"0 p
+#+end_src
+
+#+RESULTS:
+: 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+
+#+begin_src j
+  +/   ((r0; c0; 0; 1; M)&sim)"0 p
+#+end_src
+
+#+RESULTS:
+: 18
 
 * org-configuration
 #+STARTUP: align fold nodlcheck hidestars oddeven lognotestate
