@@ -2,7 +2,7 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2025-01-03 21:47:19 alex
+#+last_modified: 2025-01-03 23:04:01 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -227,7 +227,6 @@ f =: 'input.txt'
 #+end_example
 
 * 2
-
 ** Positions of all dots
 #+begin_src j
   j./~ i.#M
@@ -316,7 +315,6 @@ Add two  more input/output - number of 'X's on previous and current steps to det
 #+end_src
 
 #+RESULTS:
-: 1
 
 ** Run for all positions
 #+begin_src j
@@ -324,7 +322,6 @@ Add two  more input/output - number of 'X's on previous and current steps to det
 #+end_src
 
 #+RESULTS:
-: 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0
 
 #+begin_src j
   +/   ((r0; c0; 0; 1; M)&sim)"0 p

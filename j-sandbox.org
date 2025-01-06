@@ -1,7 +1,7 @@
 #+TITLE: J Sandbox
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2024-12-30 23:44:41 alex
+#+last_modified: 2025-01-02 18:50:09 alex
 
 * Table of contents                                                     :TOC:
 - [[#heads-and-tails][Heads and tails]]
@@ -43,11 +43,19 @@
 
 * Indices
 #+begin_src j
-   1 0 1 0 0 0 # 3 1 4 1 5 9
+   1 0 1 0 0 1 # 3 1 4 1 5 9
 #+end_src
 
 #+RESULTS:
-: 3 4
+: 3 4 9
+
+#+begin_src j
+   (2 3 $ 1 0 1 0 0 1) # 2 3 $ 3 1 4 1 5 9
+#+end_src
+
+#+RESULTS:
+: |length error, executing dyad #
+: |rows of x contain 3 values each but y has 2 items
 
 Finds the first occurrence of =y= in =x=
 https://code.jsoftware.com/wiki/Vocabulary/idot#dyadic

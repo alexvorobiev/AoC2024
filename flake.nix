@@ -6,14 +6,14 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
             (self: super: {
-              j = super.callPackage ./j/package.nix {};
+              j = super.callPackage ./j/package.nix { avx2Support = true; };
             })
           ];
         };

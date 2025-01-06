@@ -4,6 +4,7 @@
 , which
 , gmp
 , avx2Support ? stdenv.hostPlatform.avx2Support
+, nasm
 , makeWrapper
 , pcre2
 , libxml2
@@ -18,16 +19,21 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "22220d72a279e62a22d3fb096df875068885d7b7";
-    hash = "sha256-hIfhCsHo3nD+oABIe6Bo0Ud4HkyUodT2wdBAZpIZnSU=";
+    rev = "a274583f67aac3c7f71ace723baec39c442d3ae0";
+    hash = "sha256-O5xwOXOaGeJgwDNLEbR6S5TzOFL30OVn7KoyX7vInE4=";
   };
 
   nativeBuildInputs = [  makeWrapper ];
-  buildInputs = [ gmp pcre2 libxml2 libz sqlite which ];
+  buildInputs = [ nasm gmp pcre2 libxml2 libz sqlite which ];
 
   patches = [
     ./fix-install-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace jlibrary/system/main/stdlib.ijs \
+      --replace-fail "/sbin/ldconfig -p" echo
+  '';
 
   enableParallelBuilding = true;
 
