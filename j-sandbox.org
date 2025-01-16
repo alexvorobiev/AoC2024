@@ -1,7 +1,7 @@
 #+TITLE: J Sandbox
 #+STARTUP: inlineimages
 #+options: toc:2
-#+last_modified: 2025-01-02 18:50:09 alex
+#+last_modified: 2025-01-15 19:24:56 alex
 
 * Table of contents                                                     :TOC:
 - [[#heads-and-tails][Heads and tails]]
@@ -43,14 +43,14 @@
 
 * Indices
 #+begin_src j
-   1 0 1 0 0 1 # 3 1 4 1 5 9
+  1 0 1 0 0 1 # 3 1 4 1 5 9
 #+end_src
 
 #+RESULTS:
 : 3 4 9
 
 #+begin_src j
-   (2 3 $ 1 0 1 0 0 1) # 2 3 $ 3 1 4 1 5 9
+  (2 3 $ 1 0 1 0 0 1) # 2 3 $ 3 1 4 1 5 9
 #+end_src
 
 #+RESULTS:
@@ -60,7 +60,7 @@
 Finds the first occurrence of =y= in =x=
 https://code.jsoftware.com/wiki/Vocabulary/idot#dyadic
 #+begin_src j
-   3 1 4 1 5 9 i. 5
+  3 1 4 1 5 9 i. 5
 #+end_src
 
 #+RESULTS:
@@ -68,7 +68,7 @@ https://code.jsoftware.com/wiki/Vocabulary/idot#dyadic
 
 Several elements to search
 #+begin_src j
-   3 1 4 1 5 9 i. i.5
+  3 1 4 1 5 9 i. i.5
 #+end_src
 
 #+RESULTS:
@@ -76,7 +76,7 @@ Several elements to search
 
 =#x= if not found
 #+begin_src j
-   10 2 i. 2 5
+  10 2 i. 2 5
 #+end_src
 
 #+RESULTS:
@@ -110,7 +110,7 @@ Index of the interval of a sorted list =x= in which =y= lies
 * Sets
 ** Difference
 #+begin_src j
-   1 2 3 4 5 4 3 -. 2 4
+  1 2 3 4 5 4 3 -. 2 4
 #+end_src
 
 #+RESULTS:
@@ -191,7 +191,7 @@ Elements at intersection of rows and columns
 
 * Modify
 #+begin_src j
-100 (0 0 ; 1 1) } i.2 2
+  100 (0 0 ; 1 1) } i.2 2
 #+end_src
 
 #+RESULTS:
@@ -199,6 +199,14 @@ Elements at intersection of rows and columns
 :   2 100
 
 * Sort
+Index of the first occurrence  of elements of =y= or =#x=
+#+begin_src j
+  1 3 6 i.3 1
+#+end_src
+
+#+RESULTS:
+: 1 0
+
 #+begin_src j
   1 3 6 i.7
 #+end_src
