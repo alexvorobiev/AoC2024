@@ -2,7 +2,7 @@
 #+STARTUP: inlineimages
 #+options: toc:2
 #+property: header-args:j :session *J* :results verbatim
-#+last_modified: 2025-01-15 21:25:26 alex
+#+last_modified: 2025-01-15 21:31:33 alex
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
@@ -463,48 +463,48 @@ Load with a display
 
 #+RESULTS:
 #+begin_src j
-f =: 'input.txt'
+  f =: 'input.txt'
 
-   d =: >'b' freads f
+     d =: >'b' freads f
 
-   rotR =: |."1 @: |:
-   rotL =: rotR^:3
+     rotR =: |."1 @: |:
+     rotL =: rotR^:3
 
-   M =: rotR d
-   v0 =: {.|: I. '^' = M
-   r0 =: {.I. 0 < v0
-   c0 =: r0 { v0
+     M =: rotR d
+     v0 =: {.|: I. '^' = M
+     r0 =: {.I. 0 < v0
+     c0 =: r0 { v0
 
-   step =: 3 : 0
-  'r c M' =. y
-  pound =. (c}. r{M) i.'#'
-  (((#M) - c) - pound); r; rotL ('X' (< r ; (c + i.pound)) } M)
-)
+     step =: 3 : 0
+    'r c M' =. y
+    pound =. (c}. r{M) i.'#'
+    (((#M) - c) - pound); r; rotL ('X' (< r ; (c + i.pound)) } M)
+  )
 
-   +/+/'X' = 2{::step^:(0 < 0{::[)^:_. r0; c0; M
-5242
+     +/+/'X' = 2{::step^:(0 < 0{::[)^:_. r0; c0; M
+  5242
 
-   p =: ('.'=M) #&, j./~ i.#M
+     p =: ('.'=M) #&, j./~ i.#M
 
-   stepX =: 3 : 0
-  'r c loop M' =. y
-  pound =. (c}. r{M) i.'#'
-  NB. If the path is blocked (pound = 1), don't count ^ as loop, just turn
+     stepX =: 3 : 0
+    'r c loop M' =. y
+    pound =. (c}. r{M) i.'#'
+    NB. If the path is blocked (pound = 1), don't count ^ as loop, just turn
 
-  pos   =. < r ; (c + pound - 1)
-  loop  =. (pound > 1) *. '^' = pos { M
-  (((#M) - c) - pound); r; loop; rotL ('^' pos } M)
-)
+    pos   =. < r ; (c + pound - 1)
+    loop  =. (pound > 1) *. '^' = pos { M
+    (((#M) - c) - pound); r; loop; rotL ('^' pos } M)
+  )
 
-   sim =: 4 : 0
-  'r c M' =. x
+     sim =: 4 : 0
+    'r c M' =. x
 
-  stepX^:((0 = 2{::[) *. 0 < 0{::[)^:_. r; c; 0; ('#' (< +. y)} M)
-)
+    stepX^:((0 = 2{::[) *. 0 < 0{::[)^:_. r; c; 0; ('#' (< +. y)} M)
+  )
 
-   simLoop =: {{ 2 {:: x sim y }}
+     simLoop =: {{ 2 {:: x sim y }}
 
-   +/ ((r0; c0; M)&simLoop)"0 p
+     +/ ((r0; c0; M)&simLoop)"0 p
 #+end_src
 
 #+RESULTS:

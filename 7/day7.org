@@ -1,0 +1,51 @@
+#+title: Advent of Code 2024 Day 7
+#+last_modified: 2025-01-18 14:20:45 alex
+#+property: header-args:j :session *J* :results verbatim
+
+* Table of contents                                                     :TOC:
+- [[#1][1]]
+  - [[#data][Data]]
+- [[#org-configuration][org-configuration]]
+
+* 1
+Brute force: for each test we need to check all possible sequences of =+= and =*= . The length of the sequences is the length of the input array =n-1=. Let's use binary numbers from =0= to $2^n-1 -1$ to represent the sequences where =0= corresponds to =+= and =1= corresponds to =*=.
+
+Maybe check the boundaries first so that the test value is within the range of the sum and the product of all the numbers.
+** Data
+#+begin_src j :tangle yes :results silent
+  f =: 'input.txt'
+#+end_src
+#+begin_src j :results silent
+  f =: 'test.txt'
+#+end_src
+#+begin_src j :tangle yes :results silent
+  d =: >'b' freads f
+#+end_src
+#+begin_src j
+  (':'&(i.~)){.d
+#+end_src
+
+#+RESULTS:
+: 3
+#+begin_src j
+  (':'&E.) {.d
+#+end_src
+
+#+RESULTS:
+: 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+#+begin_src j
+  ((':'&E.) (<;.1)) ]{.d
+#+end_src
+
+#+RESULTS:
+: |valence error, executing dyad ':'&E.
+: |verb has no dyadic valence
+
+* org-configuration
+#+startup: align fold nodlcheck hidestars oddeven lognotestate inlineimages
+#+options: ^:nil toc:2
+#+property: header-args:emacs-lisp :results silent
+# Local Variables:
+# eval: (add-hook 'before-save-hook 'time-stamp nil t)
+# time-stamp-active: t
+# End:
