@@ -1,10 +1,11 @@
 #+title: Advent of Code 2024 Day 7
-#+last_modified: 2025-01-18 14:20:45 alex
+#+last_modified: 2025-01-23 18:21:50 alex
 #+property: header-args:j :session *J* :results verbatim
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
   - [[#data][Data]]
+  - [[#check-lower-and-upper-bounds][Check lower and upper bounds]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -22,24 +23,88 @@ Maybe check the boundaries first so that the test value is within the range of t
   d =: >'b' freads f
 #+end_src
 #+begin_src j
-  (':'&(i.~)){.d
+  (':'&(i.~))"1 d
 #+end_src
 
 #+RESULTS:
-: 3
+: 3 4 2 3 4 6 3 5 3
 #+begin_src j
-  (':'&E.) {.d
+  (':'&E.)"1 d
 #+end_src
 
 #+RESULTS:
 : 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0
+: 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0
+: 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
 #+begin_src j
-  ((':'&E.) (<;.1)) ]{.d
+  <;._1 ':', ]{. d
 #+end_src
 
 #+RESULTS:
-: |valence error, executing dyad ':'&E.
-: |verb has no dyadic valence
+: ┌───┬────────────┐
+: │190│ 10 19      │
+: └───┴────────────┘
+#+begin_src j
+  {{ <;._1 ':', y }}"1 d
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌──────┬─────────────┐
+│190   │ 10 19       │
+├──────┼─────────────┤
+│3267  │ 81 40 27    │
+├──────┼─────────────┤
+│83    │ 17 5        │
+├──────┼─────────────┤
+│156   │ 15 6        │
+├──────┼─────────────┤
+│7290  │ 6 8 6 15    │
+├──────┼─────────────┤
+│161011│ 16 10 13    │
+├──────┼─────────────┤
+│192   │ 17 8 14     │
+├──────┼─────────────┤
+│21037 │ 9 7 18 13   │
+├──────┼─────────────┤
+│292   │ 11 6 16 20  │
+└──────┴─────────────┘
+#+end_example
+
+Convert strings to numbers
+#+begin_src j :tangle yes :results silent
+  ]m=: ".&.> {{ <;._1 ':', y }}"1 d
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌──────┬──────────┐
+│190   │10 19     │
+├──────┼──────────┤
+│3267  │81 40 27  │
+├──────┼──────────┤
+│83    │17 5      │
+├──────┼──────────┤
+│156   │15 6      │
+├──────┼──────────┤
+│7290  │6 8 6 15  │
+├──────┼──────────┤
+│161011│16 10 13  │
+├──────┼──────────┤
+│192   │17 8 14   │
+├──────┼──────────┤
+│21037 │9 7 18 13 │
+├──────┼──────────┤
+│292   │11 6 16 20│
+└──────┴──────────┘
+#+end_example
+** Check lower and upper bounds
 
 * org-configuration
 #+startup: align fold nodlcheck hidestars oddeven lognotestate inlineimages
