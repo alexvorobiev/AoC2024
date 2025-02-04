@@ -1,11 +1,14 @@
 #+title: Advent of Code 2024 Day 7
-#+last_modified: 2025-02-01 21:44:18 alex
+#+last_modified: 2025-02-09 21:23:51 alex
 #+property: header-args:j :session *J* :results verbatim
 
 * Table of contents                                                     :TOC:
 - [[#1][1]]
   - [[#data][Data]]
   - [[#check-lower-and-upper-bounds][Check lower and upper bounds]]
+  - [[#convert-binary-number-to-a-sequence-of--and--of-a-given-length][Convert (binary) number to a sequence of + and * of a given length]]
+  - [[#construct-an-expression-given-a-string-with-a-vector-and-a-string-of-s-an-s][Construct an expression given a string with a vector and a string of +s an *s]]
+  - [[#apply-to-many-combinations-of-s-and-s][Apply to many combinations of +s and *s]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -76,7 +79,11 @@ Maybe check the boundaries first so that the test value is within the range of t
 │292   │ 11 6 16 20  │
 └──────┴─────────────┘
 #+end_example
+#+begin_src j :tangle yes :results silent
+  ]d1 =: {{ <;._1 ':', y }}"1 d
+#+end_src
 
+** Check lower and upper bounds
 Convert strings to numbers
 #+begin_src j :tangle yes :results silent
   ]m=: ".&.> {{ <;._1 ':', y }}"1 d
@@ -104,7 +111,6 @@ Convert strings to numbers
 │292   │11 6 16 20│
 └──────┴──────────┘
 #+end_example
-** Check lower and upper bounds
 #+begin_src j
   (*/,+/)>1{{.m
 #+end_src
@@ -126,55 +132,199 @@ Convert strings to numbers
 :  47 14742
 :  53 21120
 
-Fork
+Hook
 #+begin_src j
-  (;((+/,*/)@:>))/"1 m
+  ]b =: {{ (>x) , ((+/,*/)@:>) y }}/"1 m
+#+end_src
+
+#+RESULTS:
+:    190  29   190
+:   3267 148 87480
+:     83  22    85
+:    156  21    90
+:   7290  35  4320
+: 161011  39  2080
+:    192  39  1904
+:  21037  47 14742
+:    292  53 21120
+
+<<<bounds filter>>>
+#+begin_src j
+  {{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b
+#+end_src
+
+#+RESULTS:
+: 1 1 1 0 0 0 1 0 1
+#+begin_src j
+  ({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # m
 #+end_src
 
 #+RESULTS:
 #+begin_example
-┌────────┬─────────┐
-│┌───┐   │29 190   │
-││190│   │         │
-│└───┘   │         │
-├────────┼─────────┤
-│┌────┐  │148 87480│
-││3267│  │         │
-│└────┘  │         │
-├────────┼─────────┤
-│┌──┐    │22 85    │
-││83│    │         │
-│└──┘    │         │
-├────────┼─────────┤
-│┌───┐   │21 90    │
-││156│   │         │
-│└───┘   │         │
-├────────┼─────────┤
-│┌────┐  │35 4320  │
-││7290│  │         │
-│└────┘  │         │
-├────────┼─────────┤
-│┌──────┐│39 2080  │
-││161011││         │
-│└──────┘│         │
-├────────┼─────────┤
-│┌───┐   │39 1904  │
-││192│   │         │
-│└───┘   │         │
-├────────┼─────────┤
-│┌─────┐ │47 14742 │
-││21037│ │         │
-│└─────┘ │         │
-├────────┼─────────┤
-│┌───┐   │53 21120 │
-││292│   │         │
-│└───┘   │         │
-└────────┴─────────┘
+┌────┬──────────┐
+│190 │10 19     │
+├────┼──────────┤
+│3267│81 40 27  │
+├────┼──────────┤
+│83  │17 5      │
+├────┼──────────┤
+│192 │17 8 14   │
+├────┼──────────┤
+│292 │11 6 16 20│
+└────┴──────────┘
 #+end_example
 
-#+begin_src j
-  (()((+/,*/)@:>))/"1 m
 #+end_src
+#+begin_src j :tangle yes :results silent
+  m1 =: ({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # m
+#+end_src
+** Convert (binary) number to a sequence of + and * of a given length
+#+begin_src j
+  #:5
+#+end_src
+
+#+RESULTS:
+: 1 0 1
+
+#+begin_src j
+  10 {{ ((x - #b) $ 0) , b=.#:y }} 5
+#+end_src
+
+#+RESULTS:
+: 0 0 0 0 0 0 0 1 0 1
+#+begin_src j
+  '*' (I. 10 {{ ((x - #b) $ 0) , b=.#:y }} 5) } 10$'+'
+#+end_src
+
+#+RESULTS:
+: +++++++*+*
+
+#+begin_src j
+  10 {{'*' (I. x {{ ((x - #b) $ 0) , b=.#:y }} y) } x $'+'}} 5
+#+end_src
+
+#+RESULTS:
+: +++++++*+*
+
+#+begin_src j
+  3&{{'*' (I. x {{ ((x - #b) $ 0) , b=.#:y }} y) } x $'+'}}"0 i.2^3
+#+end_src
+
+#+RESULTS:
+: +++
+: ++*
+: +*+
+: +**
+: *++
+: *+*
+: **+
+: ***
+#+begin_src j :tangle yes :results silent
+  seq =: {{ y&{{'*' (I. x {{ ((x - #b) $ 0) , b=.#:y }} y) } x $'+'}}"0 i.2^y }}
+#+end_src
+
+#+begin_src j
+  seq 3
+#+end_src
+
+#+RESULTS:
+: +++
+: ++*
+: +*+
+: +**
+: *++
+: *+*
+: **+
+: ***
+** Construct an expression given a string with a vector and a string of +s an *s
+#+begin_src j
+  '+*' (I.'1 2 3'=' ')}'1 2 3'
+#+end_src
+
+#+RESULTS:
+: 1+2*3
+
+#+begin_src j
+  '1 2 3' {{y (I. x = ' ')} x}} '+*'
+#+end_src
+
+#+RESULTS:
+: 1+2*3
+
+#+begin_src j
+  ". '1 2 3' {{y (I. x = ' ')} x}} '+*'
+#+end_src
+
+#+RESULTS:
+: 7
+
+#+begin_src j
+  '1 2 3'&{{y (I. x = ' ')} x}}"1 seq 2
+#+end_src
+
+#+RESULTS:
+: 1+2+3
+: 1+2*3
+: 1*2+3
+: 1*2*3
+
+Construct the expressions and compute the results
+#+begin_src j
+  ". '1 2 3'&{{y (I. x = ' ')} x}}"1 seq 2
+#+end_src
+
+#+RESULTS:
+: 6 7 5 6
+
+** Apply to many combinations of +s and *s
+
+The numeric arrays in m1 can be used to get the number of spaces between the numbers quickly
+#+begin_src j :tangle yes :results silent
+  s =: ((#m1), 1) $ <:@:# each {: |: m1
+#+end_src
+
+#+begin_src j
+  s
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─┐
+│1│
+├─┤
+│2│
+├─┤
+│1│
+├─┤
+│2│
+├─┤
+│3│
+└─┘
+#+end_example
+
+Filter input data using the bounds filter and append the number of spaces:
+#+begin_src j :tangle yes :results silent
+  df =: s,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # d1
+#+end_src
+
+#+begin_src j
+  df
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌─┬────┬─────────────┐
+│1│190 │ 10 19       │
+├─┼────┼─────────────┤
+│2│3267│ 81 40 27    │
+├─┼────┼─────────────┤
+│1│83  │ 17 5        │
+├─┼────┼─────────────┤
+│2│192 │ 17 8 14     │
+├─┼────┼─────────────┤
+│3│292 │ 11 6 16 20  │
+└─┴────┴─────────────┘
+#+end_example
 
 * org-configuration
 #+startup: align fold nodlcheck hidestars oddeven lognotestate inlineimages
