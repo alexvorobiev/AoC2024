@@ -1,5 +1,5 @@
 #+title: Advent of Code 2024 Day 7
-#+last_modified: 2025-02-09 21:23:51 alex
+#+last_modified: 2025-02-25 21:44:13 alex
 #+property: header-args:j :session *J* :results verbatim
 
 * Table of contents                                                     :TOC:
@@ -8,7 +8,9 @@
   - [[#check-lower-and-upper-bounds][Check lower and upper bounds]]
   - [[#convert-binary-number-to-a-sequence-of--and--of-a-given-length][Convert (binary) number to a sequence of + and * of a given length]]
   - [[#construct-an-expression-given-a-string-with-a-vector-and-a-string-of-s-an-s][Construct an expression given a string with a vector and a string of +s an *s]]
-  - [[#apply-to-many-combinations-of-s-and-s][Apply to many combinations of +s and *s]]
+  - [[#return-true-if-at-least-one-result-matches-the-given-value][Return true if at least one result matches the given value]]
+  - [[#apply-to-the-data][Apply to the data]]
+  - [[#not-needed-apply-to-many-combinations-of-s-and-s][NOT NEEDED: Apply to many combinations of +s and *s]]
 - [[#org-configuration][org-configuration]]
 
 * 1
@@ -80,13 +82,17 @@ Maybe check the boundaries first so that the test value is within the range of t
 └──────┴─────────────┘
 #+end_example
 #+begin_src j :tangle yes :results silent
-  ]d1 =: {{ <;._1 ':', y }}"1 d
+  d1 =: {{ <;._1 ':', y }}"1 d
 #+end_src
 
 ** Check lower and upper bounds
 Convert strings to numbers
 #+begin_src j :tangle yes :results silent
-  ]m=: ".&.> {{ <;._1 ':', y }}"1 d
+  m=: ".&.> {{ <;._1 ':', y }}"1 d
+#+end_src
+
+#+begin_src j
+  m
 #+end_src
 
 #+RESULTS:
@@ -111,6 +117,7 @@ Convert strings to numbers
 │292   │11 6 16 20│
 └──────┴──────────┘
 #+end_example
+
 #+begin_src j
   (*/,+/)>1{{.m
 #+end_src
@@ -133,10 +140,12 @@ Convert strings to numbers
 :  53 21120
 
 Hook
-#+begin_src j
-  ]b =: {{ (>x) , ((+/,*/)@:>) y }}/"1 m
+#+begin_src j :tangle yes :results silent
+  b =: {{ (>x) , ((+/,*/)@:>) y }}/"1 m
 #+end_src
-
+#+begin_src j
+  b
+#+end_src
 #+RESULTS:
 :    190  29   190
 :   3267 148 87480
@@ -276,7 +285,59 @@ Construct the expressions and compute the results
 #+RESULTS:
 : 6 7 5 6
 
-** Apply to many combinations of +s and *s
+Tacit
+#+begin_src j
+  I.@:]' '&= '1 2 3'
+#+end_src
+
+#+RESULTS:
+: 1 3
+#+begin_src j
+  seq@:# I.@:]' '&= '1 2 3'
+#+end_src
+
+#+RESULTS:
+: ++
+: +*
+: *+
+: **
+
+Hook
+#+begin_src j
+  ({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) '1 2 3'
+#+end_src
+
+#+RESULTS:
+: 1+2+3
+: 1+2*3
+: 1*2+3
+: 1*2*3
+
+Monad
+#+begin_src j
+  ".({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) '1 2 3'
+#+end_src
+
+#+RESULTS:
+: 6 7 5 6
+** Return true if at least one result matches the given value
+#+begin_src j
+  6&= ".({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) '1 2 3'
+#+end_src
+
+#+RESULTS:
+: 1 0 0 1
+#+begin_src j
+  +./ 6&= ".({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) '1 2 3'
+#+end_src
+
+#+RESULTS:
+: 1
+** Apply to the data
+#+begin_src j
+
+#+end_src
+** NOT NEEDED: Apply to many combinations of +s and *s
 
 The numeric arrays in m1 can be used to get the number of spaces between the numbers quickly
 #+begin_src j :tangle yes :results silent
