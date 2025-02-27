@@ -1,5 +1,5 @@
 #+title: Advent of Code 2024 Day 7
-#+last_modified: 2025-02-25 21:44:13 alex
+#+last_modified: 2025-02-26 21:35:46 alex
 #+property: header-args:j :session *J* :results verbatim
 
 * Table of contents                                                     :TOC:
@@ -334,9 +334,47 @@ Monad
 #+RESULTS:
 : 1
 ** Apply to the data
-#+begin_src j
-
+Filter input data using the bounds filter
+#+begin_src j :tangle yes :results silent
+  df =: b,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # d1
 #+end_src
+
+#+begin_src j
+  df
+#+end_src
+
+=dltb= is an alias for a foreign function to trim strings
+#+begin_src j :tangle yes :results silent
+  sol =: 3 : 0
+    's v' =. y
+    +./ s&= ".({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) ": |.v
+  )
+#+end_src
+
+#+begin_src j
+  sol {. m1
+#+end_src
+
+#+RESULTS:
+: 1
+#+begin_src j
+  ix =: sol"1 m1
+#+end_src
+
+#+begin_src j
+  ix
+#+end_src
+
+#+RESULTS:
+: 1 1 0 0 1
+
+#+begin_src j :tangle yes
+  +/> (sol"1 m1) # {.|: m1
+#+end_src
+
+#+RESULTS:
+: 3749
+
 ** NOT NEEDED: Apply to many combinations of +s and *s
 
 The numeric arrays in m1 can be used to get the number of spaces between the numbers quickly
@@ -365,7 +403,7 @@ The numeric arrays in m1 can be used to get the number of spaces between the num
 
 Filter input data using the bounds filter and append the number of spaces:
 #+begin_src j :tangle yes :results silent
-  df =: s,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # d1
+  df =: s,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} 1" b) # d1
 #+end_src
 
 #+begin_src j
