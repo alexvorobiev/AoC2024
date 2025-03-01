@@ -1,5 +1,5 @@
 #+title: Advent of Code 2024 Day 7
-#+last_modified: 2025-02-26 21:35:46 alex
+#+last_modified: 2025-02-28 21:50:27 alex
 #+property: header-args:j :session *J* :results verbatim
 
 * Table of contents                                                     :TOC:
@@ -10,13 +10,12 @@
   - [[#construct-an-expression-given-a-string-with-a-vector-and-a-string-of-s-an-s][Construct an expression given a string with a vector and a string of +s an *s]]
   - [[#return-true-if-at-least-one-result-matches-the-given-value][Return true if at least one result matches the given value]]
   - [[#apply-to-the-data][Apply to the data]]
-  - [[#not-needed-apply-to-many-combinations-of-s-and-s][NOT NEEDED: Apply to many combinations of +s and *s]]
+  - [[#final-script][Final script]]
 - [[#org-configuration][org-configuration]]
 
 * 1
 Brute force: for each test we need to check all possible sequences of =+= and =*= . The length of the sequences is the length of the input array =n-1=. Let's use binary numbers from =0= to $2^n-1 -1$ to represent the sequences where =0= corresponds to =+= and =1= corresponds to =*=.
 
-Maybe check the boundaries first so that the test value is within the range of the sum and the product of all the numbers.
 ** Data
 #+begin_src j :tangle yes :results silent
   f =: 'input.txt'
@@ -81,11 +80,13 @@ Maybe check the boundaries first so that the test value is within the range of t
 │292   │ 11 6 16 20  │
 └──────┴─────────────┘
 #+end_example
-#+begin_src j :tangle yes :results silent
+#+begin_src j :tangle no :results silent
   d1 =: {{ <;._1 ':', y }}"1 d
 #+end_src
 
 ** Check lower and upper bounds
+Ignore this section. sum and product are not the boundaries if there are  1s in the sequence. Example: =19: 9 2 1=
+
 Convert strings to numbers
 #+begin_src j :tangle yes :results silent
   m=: ".&.> {{ <;._1 ':', y }}"1 d
@@ -139,8 +140,8 @@ Convert strings to numbers
 :  47 14742
 :  53 21120
 
-Hook
-#+begin_src j :tangle yes :results silent
+Wrong assumption!
+#+begin_src j :tangle no :results silent
   b =: {{ (>x) , ((+/,*/)@:>) y }}/"1 m
 #+end_src
 #+begin_src j
@@ -184,7 +185,7 @@ Hook
 #+end_example
 
 #+end_src
-#+begin_src j :tangle yes :results silent
+#+begin_src j :tangle no :results silent
   m1 =: ({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # m
 #+end_src
 ** Convert (binary) number to a sequence of + and * of a given length
@@ -334,16 +335,6 @@ Monad
 #+RESULTS:
 : 1
 ** Apply to the data
-Filter input data using the bounds filter
-#+begin_src j :tangle yes :results silent
-  df =: b,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} "1 b) # d1
-#+end_src
-
-#+begin_src j
-  df
-#+end_src
-
-=dltb= is an alias for a foreign function to trim strings
 #+begin_src j :tangle yes :results silent
   sol =: 3 : 0
     's v' =. y
@@ -352,14 +343,16 @@ Filter input data using the bounds filter
 #+end_src
 
 #+begin_src j
-  sol {. m1
+  sol {. m
 #+end_src
 
 #+RESULTS:
 : 1
 #+begin_src j
-  ix =: sol"1 m1
+  ix =: sol"1 m
 #+end_src
+
+#+RESULTS:
 
 #+begin_src j
   ix
@@ -369,60 +362,37 @@ Filter input data using the bounds filter
 : 1 1 0 0 1
 
 #+begin_src j :tangle yes
-  +/> (sol"1 m1) # {.|: m1
+  +/> (sol"1 m) # {.|: m
 #+end_src
 
 #+RESULTS:
 : 3749
-
-** NOT NEEDED: Apply to many combinations of +s and *s
-
-The numeric arrays in m1 can be used to get the number of spaces between the numbers quickly
-#+begin_src j :tangle yes :results silent
-  s =: ((#m1), 1) $ <:@:# each {: |: m1
+** Final script
+#+begin_src emacs-lisp :results silent
+  (org-babel-tangle)
 #+end_src
 
+Load with a display
 #+begin_src j
-  s
+  loadd 'day7.j'
 #+end_src
 
 #+RESULTS:
 #+begin_example
-┌─┐
-│1│
-├─┤
-│2│
-├─┤
-│1│
-├─┤
-│2│
-├─┤
-│3│
-└─┘
-#+end_example
+f =: 'input.txt'
 
-Filter input data using the bounds filter and append the number of spaces:
-#+begin_src j :tangle yes :results silent
-  df =: s,.({{ ( ((2{y)&>:)*.((1{y)&<:) ) {.y }} 1" b) # d1
-#+end_src
+   d =: >'b' freads f
 
-#+begin_src j
-  df
-#+end_src
+   m=: ".&.> {{ <;._1 ':', y }}"1 d
 
-#+RESULTS:
-#+begin_example
-┌─┬────┬─────────────┐
-│1│190 │ 10 19       │
-├─┼────┼─────────────┤
-│2│3267│ 81 40 27    │
-├─┼────┼─────────────┤
-│1│83  │ 17 5        │
-├─┼────┼─────────────┤
-│2│192 │ 17 8 14     │
-├─┼────┼─────────────┤
-│3│292 │ 11 6 16 20  │
-└─┴────┴─────────────┘
+   seq =: {{ y&{{'*' (I. x {{ ((x - #b) $ 0) , b=.#:y }} y) } x $'+'}}"0 i.2^y }}
+
+   sol =: 3 : 0
+  's v' =. y
+  +./ s&= ".({{ (seq@:#y) y}"1 x }} (I.@:]' '&=)) ": |.v
+)
+
+   +/> (sol"1 m) # {.|: m
 #+end_example
 
 * org-configuration
